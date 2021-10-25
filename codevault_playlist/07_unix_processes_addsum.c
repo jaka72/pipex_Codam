@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	int arr[] = {1,2,3,4,5,6,7};
+	int arr[] = {1, 2, 3, 4, 5, 6, 7};
 	int arrsize = sizeof(arr) / sizeof(int);
 	int fd[2];
 	pipe(fd);
@@ -30,15 +30,14 @@ int main(void)
 			start++;
 		}
 		//wait(NULL);
-		int receive;
-		read(fd[0], &receive, sizeof(int));
+		int received;
+		read(fd[0], &received, sizeof(int));
 		close(fd[0]);
 		printf("Sum: %d\n", sum);
-		printf("Totaal sum: %d\n", sum + receive);
+		printf("Received: %d\n", received);
+		printf("Totaal sum: %d\n", sum + received);
 		wait(NULL);
 	}
-	
-
 
 
 	return (0);
