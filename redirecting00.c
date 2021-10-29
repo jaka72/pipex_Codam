@@ -24,4 +24,7 @@ wc -l file1.txt
 wc -l < file1.txt		file content first goes to stdinput, then wc reads 
   33					reads from stdinput. wc doesn't know from which file info came 
 
+Not possible:
+  file1.txt > wc -l
+
 */

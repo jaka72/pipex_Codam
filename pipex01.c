@@ -4,9 +4,26 @@
 QUESTIONS
 This ignores content of infile, just prints the dir content
 	./pipex infile ``ls -l'' ``wc -l'' outfile
+*/
 
+
+
+/*
+fork into 2 processes
+In child process, call exec cm1, with input file1
+	child returns some result, gives it into the pipe,
+	which goes to parent process
+
+Parent waits for the child to finish
+	Takes, reads the result of the child from the pipe
+	Performs cmd2
+	Prints the result into outfile
+
+	pipe[0]  =>  read_from_pipe
+	pipe[1]  =>  write_to_pipe
 
 */
+
 
 // Ask dvan-kri
 // int check_at_exit()
@@ -46,7 +63,6 @@ int	main(int argc, char *argv[], char *envp[])
 	int		fd2;
 	int		fd1;
 	int		bytesread;
-	char	buffer[4000];
 	char	**cmd1;
 	char	**cmd2;
 	char	*infile;
@@ -61,108 +77,40 @@ int	main(int argc, char *argv[], char *envp[])
 	if (pipe(mypipe) == -1)
 		return (-1);
 
-
-//	get_arguments(argv[2], argv[3], cmd1, cmd2);
 	cmd1 = get_arguments(argv[2]);
-//	printf("cmd1[0]: {%s}\n\n", cmd1[0]);
-
-	i = 0;
-	// while (cmd1[i] != NULL)
+	// i = 0;
+	// while (envp[i] != NULL)
 	// {	
-	// 	printf("i)\n");
-	// 	printf("%s\n", cmd1[i]);	
+	// 	printf("%s\n", envp[i]);	
 	// 	i++;
 	// }
 
-	while (envp[i] != NULL)
-	{	
-		printf("%s\n", envp[i]);	
-		i++;
-	}
-
-
 	path_cmd1 = ft_strjoin("/bin/", cmd1[0]);
-//	ft_strjoin("/bin/", cmd1[0]);
-//	printf("cmd1[0]: {%s}\n\n", cmd1[0]);
 	printf("joined: {%s}\n\n", path_cmd1);
 
-//	printf("%s %s %s %s\n", argv[1], argv[2], argv[3], argv[4]);
-
-
-/*
-fork into 2 processes
-In child process, call exec cm1, with input file1
-	child returns some result, gives it inot the pipe,
-	which goes to parent process
-
-Parent waits for the child to finish
-	Takes, reads the result of the child from the pipe
-	Performs cmd2
-	Prints the result into outfile
-
-	pipe[0]  =>  read_from_pipe
-	pipe[1]  =>  write_to_pipe
-
-*/
-
-	
-//	execlp("wc", "wc", "-w", "file1.txt", NULL);
 	pid = fork();
+
 	if (pid == 0)
 	{
 		// child
 		close(mypipe[0]);	// read_from_pipe not needed
-		fd1 = open("file1.txt", O_RDONLY);
-
-		dup2(fd1, 0);	    // content of the file fd1 goes to stdinput of cat 
-		dup2(mypipe[1], 1);	// output of cat becomes 
-		//						 write_to_pipe, GOES to PARENT
+		fd1 = open(infile, O_RDONLY);
+		dup2(fd1, 0);	    // content of the file fd1 goes to stdin of cmd_1
+		dup2(mypipe[1], 1);	// output of cmd_1 becomes write_to_pipe, GOES to PARENT
 		close(fd1);
-//		write(mypipe[1], , 10);
-//		write(fd, buffer, bytesread);
-
-
-//		char *args[] = {"/bin/grep", "one", "file1.txt", NULL}; // NOT WORKING ????
-//		char *args[] = {"/bin/cat", "file1.txt", NULL};   //     WORKING
+		close(mypipe[1]);
 		char *args[] = {"/bin/cat", NULL};   //     WORKING
-//		char *envps[] = {NULL};
-
-//		HERE COMES AS 2nd ARGUMENT THE ARRAY FROM ft_split
-//		execve(path_cmd1, cmd1, NULL);
-		close(mypipe[1]);
 		execve(args[0], args, NULL);
-
-//		die("execve");  // not permitted???
-//		printf("a)\n");
-		
-	} else
-	{
+	} else 	{
 		// parent
-
-//		printf("b)\n");
-		fd2 = open("file3.txt", O_WRONLY);
 		close(mypipe[1]);
-		dup2(mypipe[0], 0);
-		dup2(fd2, 1);
+		fd2 = open(outfile, O_WRONLY);
+		dup2(mypipe[0], 0); // read from pipe becomes stdin
+		dup2(fd2, 1);		//  file becomes destination (output)
 		close(fd2);
-//		dup2(1, mypipe[0]);
-//		dup2(fd2, 0);
-//		bytesread = read(mypipe[0], buffer, sizeof(buffer));
-//		char *ff = ft_split("wc -l", ' ');
-		// char *args2[] = {"cat", "-n", NULL};
-		char *args2[] = {"wc", "-l", NULL};
+		close(mypipe[0]);
+		char *args2[] = {"wc", NULL};
 		execve("/usr/bin/wc", args2, NULL);
-//		printf("d)\n");
-		
-//		write(fd2, buffer, bytesread);
-//		write(1, buffer, bytesread);
-
-//		close(mypipe[0]);
-//		close(fd);
-//		printf("\nFrom parent:\n\n");
-//		buffer[bytesread] = '\0';
-//		printf("br: %d\n buffer: \n[%s]\n", bytesread, buffer);
-//		wait(NULL);
 	}
 
 
@@ -180,6 +128,8 @@ Parent waits for the child to finish
 	// 	i++;
 	// }
 	// free(cmd1);
+
+	printf("\nEnd of main:\n\n");
 
 
 	return (0);
