@@ -6,7 +6,7 @@
 /*   By: jmurovec <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/10/30 11:33:09 by jmurovec      #+#    #+#                 */
-/*   Updated: 2020/11/04 16:06:10 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/10/31 19:36:55 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void			ft_putchar_fd(int c, int fd);
 void			ft_putstr_fd(char *s, int fd);
 void			ft_putendl_fd(char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
-char			*ft_strcpy(char *dest, char *src);
+//char			*ft_strcpy(char *dest, char *src);
 int				ft_isspace(int c);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);

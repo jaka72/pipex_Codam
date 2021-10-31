@@ -15,6 +15,7 @@ BONUS	= 0
 C_FILES_MAND 	= pipex01.c
 
 O_FILES_MAND	= $(patsubst %, $(OBJ_DIR)/%, $(C_FILES_MAND:.c=.o))
+#O_FILES_MAND	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 all:	make_libft	make_obj_dir	$(NAME)
 	@echo "$(GRN)\n --- Done --- $(WHITE)"
@@ -32,12 +33,12 @@ make_obj_dir:
 
 
 $(OBJ_DIR)/%.o:		%.c
-	@echo "$(YEL)\n --- Making .o file --- $(WHITE)
+	@echo "$(YEL)\n --- Making .o file --- $(WHITE)"
 	gcc -g $(FLAGS) -c $< -o $@
 
 
 $(NAME): $(O_FILES_MAND)
-	@echo "$(YEL)\n --- Making the Executable --- $(WHITE)
+	@echo "$(YEL)\n --- Making the Executable --- $(WHITE)"
 	gcc $^ $(FLAGS) $(LIBFT) -o $(NAME)
 
 re: clean_all

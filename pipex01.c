@@ -63,7 +63,7 @@ int	main(int argc, char *argv[], char *envp[])
 //	int		i;
 	int		pid1;
 	int		pid2;
-	int		mypipe[2];
+	int		pipe_end[2];
 	int		fd2;
 	int		fd1;
 	char	**cmd1;
@@ -75,17 +75,14 @@ int	main(int argc, char *argv[], char *envp[])
 	char	*path_cmd2;
 	char	**bin_paths_cmd1;
 	char	**bin_paths_cmd2;
-//	char 	*path_cmd1;
-//	char 	*path_cmd2;
 
 	if (argc < 1)
 		return (0);
 
 	infile = argv[1];
 	outfile = argv[4];
-//	cmd1 = argv[2];
-//	cmd2 = argv[3];
-	if (pipe(mypipe) == -1)
+
+	if (pipe(pipe_end) == -1)
 		return (-1);
 
 	cmd1 = get_command(argv[2]);
@@ -116,7 +113,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (bin_paths_cmd1[i] != NULL)
 	{
 		bin_paths_cmd1[i] = ft_strjoin(bin_paths_cmd1[i], cmd1[0]);
-		printf("   cmd 1 path: %s\n", bin_paths_cmd1[i]);
+//		printf("   cmd 1 path: %s\n", bin_paths_cmd1[i]);
 		i++;
 	}
 
@@ -125,7 +122,7 @@ int	main(int argc, char *argv[], char *envp[])
 	while (bin_paths_cmd2[i] != NULL)
 	{
 		bin_paths_cmd2[i] = ft_strjoin(bin_paths_cmd2[i], cmd2[0]);
-		printf("   cmd 2 path: %s\n", bin_paths_cmd2[i]);
+//		printf("   cmd 2 path: %s\n", bin_paths_cmd2[i]);
 		i++;
 	}
 
@@ -135,9 +132,11 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		if (access(bin_paths_cmd1[i], X_OK) == 0)
 		{
-			printf("\nCorrect path CMD 1: %s\n", bin_paths_cmd1[i]);
+//			printf("\nCorrect path CMD 1: %s\n", bin_paths_cmd1[i]);
 			path_cmd1 = bin_paths_cmd1[i];
 		}
+//		else
+//			perror(" this is perror --------------\n");
 		i++;	
 	}
 
@@ -147,9 +146,11 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		if (access(bin_paths_cmd2[i], X_OK) == 0)
 		{
-			printf("\nCorrect path CMD 2: %s\n", bin_paths_cmd2[i]);
+//			printf("\nCorrect path CMD 2: %s\n", bin_paths_cmd2[i]);
 			path_cmd2 = bin_paths_cmd2[i];
 		}
+//		else
+//			perror(" this is perror --------------\n");
 		i++;	
 	}
 
@@ -170,33 +171,45 @@ int	main(int argc, char *argv[], char *envp[])
 		if (pid2 == 0)
 		{
 			// child
-			close(mypipe[0]);	// read_from_pipe not needed
+			close(pipe_end[0]);	// read_from_pipe not needed
 			fd1 = open(infile, O_RDONLY);
+			if (fd1 < 0)
+			{
+				perror("pipex: input");
+				return (-1);
+			}
 			dup2(fd1, 0);	    // content of the file fd1 goes to stdin, which 
 								// will be read by cmd_1
-			dup2(mypipe[1], 1);	// output of cmd_1 becomes write_to_pipe, GOES to PARENT
+			dup2(pipe_end[1], 1);	// output of cmd_1 becomes write_to_pipe, GOES to PARENT
 								// without this dup2, nothing writes into pipe
 			close(fd1);
-			close(mypipe[1]);
+			close(pipe_end[1]);
 //			char *args1[] = {"/bin/cat", NULL};   //     WORKING
 			execve(path_cmd1, cmd1, NULL);
 		} 
 		else
 		{
 			// parent
-			close(mypipe[1]);
-			fd2 = open(outfile, O_WRONLY);
-			dup2(mypipe[0], 0); // read from pipe becomes stdin
+			wait(NULL);
+			close(pipe_end[1]);
+//			fd2 = open(outfile, O_CREAT | O_WRONLY, 0644);
+			fd2 = open(outfile, O_CREAT | O_RDWR | O_TRUNC, 0644);
+			if (fd2 < 0)
+			{
+				perror(" this is perror --------------\n");
+				return (-1);
+			}
+			dup2(pipe_end[0], 0); // read from pipe becomes stdin
 			dup2(fd2, 1);		//  file becomes destination (output)
 			close(fd2);
-			close(mypipe[0]);
+			close(pipe_end[0]);
 	//		char *args2[] = {"/usr/bin/wc", "-c", NULL};
 //			char *args2[] = {"/usr/bin/wc", NULL};
 			execve(path_cmd2, cmd2, NULL);
 		}
-		printf("Before wait() - this is not printed\n ...");
-//		wait(NULL);
-		printf("After second fork\n ...");
+//		printf("Before wait() - this is not printed\n ...");
+		wait(NULL);
+//		printf("After second fork\n ...");
 	}
 
 
@@ -213,7 +226,7 @@ int	main(int argc, char *argv[], char *envp[])
 	// }
 	// free(cmd1);
 
-	printf("\nEnd of main:\n\n");
+//	printf("\nEnd of main:\n\n");
 
 
 	return (0);
