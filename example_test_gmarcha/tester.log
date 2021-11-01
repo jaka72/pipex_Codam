@@ -2,28 +2,162 @@
 
 
       BASIC TEST
+      NUMBER 1
+      < input grep Hello | wc -l > output
+
+
+ - Bash output file: None
+
+ - Pipex output file:
+       1
+\EOF
+
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
+
+ - Pipex standard stream:
+ Command: [grep]
+
+ Command: [grep]
+
+\EOF
+
+(Your pipex' errors are written on standard output!)
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
+
+
+============================================================================
+
+
+      BASIC TEST
+      NUMBER 2
+      < input grep Hello | wc -l > output
+
+
+ - Bash output file: None
+
+ - Pipex output file:
+       5
+\EOF
+
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
+
+ - Pipex standard stream:
+ Command: [grep]
+
+ Command: [grep]
+
+\EOF
+
+(Your pipex' errors are written on standard output!)
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
+
+
+============================================================================
+
+
+      BASIC TEST
+      NUMBER 3
+      < input grep Hello | ls -la src/ > output
+
+
+ - Bash output file: None
+
+ - Pipex output file:
+total 56
+drwxr-xr-x   6 jmurovec  piscine   204 Nov  1 10:50 .
+drwxr-xr-x  14 jmurovec  piscine   476 Nov  1 11:54 ..
+-rw-r--r--   1 jmurovec  piscine  4657 Nov  1 10:50 main.c
+-rw-r--r--   1 jmurovec  piscine   833 Nov  1 10:50 runTest.c
+-rw-r--r--   1 jmurovec  piscine  8492 Nov  1 10:50 test.c
+-rw-r--r--   1 jmurovec  piscine   427 Nov  1 10:50 utils.c
+\EOF
+
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
+
+ - Pipex standard stream:
+ Command: [grep]
+
+ Command: [grep]
+
+\EOF
+
+(Your pipex' errors are written on standard output!)
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
+
+
+============================================================================
+
+
+      BASIC TEST
+      NUMBER 4
+      < input ls -la src/ | wc -l > output
+
+
+ - Bash output file: None
+
+ - Pipex output file:
+       7
+\EOF
+
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
+
+ - Pipex standard stream:
+ Command: [ls]
+
+ Command: [ls]
+
+\EOF
+
+(Your pipex' errors are written on standard output!)
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
+
+
+============================================================================
+
+
+      BASIC TEST
       NUMBER 5
       < input grep Hello | awk '{count++} END {print count}' > output
 
 
- - Bash output file:
-2
-\EOF
+ - Bash output file: None
 
  - Pipex output file: Empty
 
- - Bash standard stream: None
-
- - Pipex standard stream:
-awk: cmd. line:1: '{count++}
-awk: cmd. line:1: ^ invalid char ''' in expression
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
 \EOF
 
- - Bash exit code value: 0
+ - Pipex standard stream:
+/awk: syntax error at source line 1
+ context is
+	 >>> ' <<< 
+/awk: bailing out at source line 1
+\EOF
+
+ - Bash exit code value: 1
 
  - Pipex exit code value: 0
-
-File permissions of output files match
 
 
 ============================================================================
@@ -34,24 +168,25 @@ File permissions of output files match
       < input grep Hello | awk "{count++} END {print count}" > output
 
 
- - Bash output file:
-2
-\EOF
+ - Bash output file: None
 
  - Pipex output file: Empty
 
- - Bash standard stream: None
-
- - Pipex standard stream:
-awk: cmd. line:1: "{count++}
-awk: cmd. line:1: ^ unterminated string
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
 \EOF
 
- - Bash exit code value: 0
+ - Pipex standard stream:
+/awk: non-terminated string {count++}... at source line 1
+ context is
+	 >>>  <<< 
+/awk: giving up
+ source line number 2
+\EOF
+
+ - Bash exit code value: 1
 
  - Pipex exit code value: 0
-
-File permissions of output files match
 
 
 ============================================================================
@@ -62,25 +197,24 @@ File permissions of output files match
       < input grep Hello | awk '"{count++} END {print count}"' > output
 
 
- - Bash output file:
-Hello World!
-Hello World!
-\EOF
+ - Bash output file: None
 
  - Pipex output file: Empty
 
- - Bash standard stream: None
-
- - Pipex standard stream:
-awk: cmd. line:1: '"{count++}
-awk: cmd. line:1: ^ invalid char ''' in expression
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
 \EOF
 
- - Bash exit code value: 0
+ - Pipex standard stream:
+/awk: syntax error at source line 1
+ context is
+	 >>> ' <<< 
+/awk: bailing out at source line 1
+\EOF
+
+ - Bash exit code value: 1
 
  - Pipex exit code value: 0
-
-File permissions of output files match
 
 
 ============================================================================
@@ -91,25 +225,52 @@ File permissions of output files match
       < input grep Hello | awk "'{count++} END {print count}'" > output
 
 
- - Bash output file: Empty
+ - Bash output file: None
 
  - Pipex output file: Empty
 
  - Bash standard stream:
-awk: cmd. line:1: '{count++} END {print count}'
-awk: cmd. line:1: ^ invalid char ''' in expression
+pipexMedic: execve failed: No such file or directory
 \EOF
 
  - Pipex standard stream:
-awk: cmd. line:1: "'{count++}
-awk: cmd. line:1: ^ unterminated string
+/awk: non-terminated string '{count++}... at source line 1
+ context is
+	 >>>  <<< 
+/awk: giving up
+ source line number 2
 \EOF
 
  - Bash exit code value: 1
 
  - Pipex exit code value: 0
 
-File permissions of output files match
+
+============================================================================
+
+
+      ERROR TEST
+      NUMBER 1
+      < input grep Hello | wc -l > output
+
+
+ - Bash output file: None
+
+ - Pipex output file:
+       0
+\EOF
+
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
+
+ - Pipex standard stream:
+pipex: input: No such file or directory
+\EOF
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
 
 
 ============================================================================
@@ -120,19 +281,29 @@ File permissions of output files match
       < input grep Hello | wc -l > output (No environment)
 
 
- - Bash output file:
-1
+ - Bash output file: None
+
+ - Pipex output file:
+ Command: [grep]
+
+ Command: [grep]
+
 \EOF
 
- - Pipex output file: None
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
 
- - Bash standard stream: None
+ - Pipex standard stream:
+pipex: command 1 not found
+: No such file or directory
+pipex: command 2 not found
+: No such file or directory
+\EOF
 
- - Pipex standard stream: None
+ - Bash exit code value: 1
 
- - Bash exit code value: 0
-
- - Pipex exit code value: 11
+ - Pipex exit code value: 0
 
 
 ============================================================================
@@ -143,37 +314,30 @@ File permissions of output files match
       < input fizzBuzz | ls -la src/ > output
 
 
- - Bash output file:
-total 29
-drwxrwxrwx 1 jaka jaka    0 Oct 30 15:53 .
-drwxrwxrwx 1 jaka jaka 4096 Oct 31 19:54 ..
--rwxrwxrwx 1 jaka jaka 4657 Oct 30 15:53 main.c
--rwxrwxrwx 1 jaka jaka  833 Oct 30 15:53 runTest.c
--rwxrwxrwx 1 jaka jaka 8492 Oct 30 15:53 test.c
--rwxrwxrwx 1 jaka jaka  427 Oct 30 15:53 utils.c
-\EOF
+ - Bash output file: None
 
  - Pipex output file:
-total 29
-drwxrwxrwx 1 jaka jaka    0 Oct 30 15:53 .
-drwxrwxrwx 1 jaka jaka 4096 Oct 31 19:54 ..
--rwxrwxrwx 1 jaka jaka 4657 Oct 30 15:53 main.c
--rwxrwxrwx 1 jaka jaka  833 Oct 30 15:53 runTest.c
--rwxrwxrwx 1 jaka jaka 8492 Oct 30 15:53 test.c
--rwxrwxrwx 1 jaka jaka  427 Oct 30 15:53 utils.c
+total 56
+drwxr-xr-x   6 jmurovec  piscine   204 Nov  1 10:50 .
+drwxr-xr-x  14 jmurovec  piscine   476 Nov  1 11:54 ..
+-rw-r--r--   1 jmurovec  piscine  4657 Nov  1 10:50 main.c
+-rw-r--r--   1 jmurovec  piscine   833 Nov  1 10:50 runTest.c
+-rw-r--r--   1 jmurovec  piscine  8492 Nov  1 10:50 test.c
+-rw-r--r--   1 jmurovec  piscine   427 Nov  1 10:50 utils.c
 \EOF
 
  - Bash standard stream:
-pipex: fizzBuzz: command not found
+pipexMedic: execve failed: No such file or directory
 \EOF
 
- - Pipex standard stream: None
+ - Pipex standard stream:
+pipex: command 1 not found
+: No such file or directory
+\EOF
 
- - Bash exit code value: 0
+ - Bash exit code value: 1
 
  - Pipex exit code value: 0
-
-File permissions of output files match
 
 
 ============================================================================
@@ -184,21 +348,27 @@ File permissions of output files match
       < input ls -la src/ | buzzFizz > output
 
 
- - Bash output file: Empty
+ - Bash output file: None
 
- - Pipex output file: Empty
+ - Pipex output file:
+ Command: [ls]
 
- - Bash standard stream:
-pipex: buzzFizz: command not found
+ Command: [ls]
+
 \EOF
 
- - Pipex standard stream: None
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
 
- - Bash exit code value: 127
+ - Pipex standard stream:
+pipex: command 2 not found
+: No such file or directory
+\EOF
+
+ - Bash exit code value: 1
 
  - Pipex exit code value: 0
-
-File permissions of output files match
 
 
 ============================================================================
@@ -209,21 +379,29 @@ File permissions of output files match
       < input fizzBuzz | wc -l > output (No environment)
 
 
- - Bash output file:
-0
-\EOF
+ - Bash output file: None
 
- - Pipex output file: None
+ - Pipex output file:
+ Command: [fizzBuzz]
+
+ Command: [fizzBuzz]
+
+\EOF
 
  - Bash standard stream:
-pipex: fizzBuzz: command not found
+pipexMedic: execve failed: No such file or directory
 \EOF
 
- - Pipex standard stream: None
+ - Pipex standard stream:
+pipex: command 1 not found
+: No such file or directory
+pipex: command 2 not found
+: No such file or directory
+\EOF
 
- - Bash exit code value: 0
+ - Bash exit code value: 1
 
- - Pipex exit code value: 11
+ - Pipex exit code value: 0
 
 
 ============================================================================
@@ -234,18 +412,58 @@ pipex: fizzBuzz: command not found
       < input grep Hello | buzzFizz > output (No environment)
 
 
- - Bash output file: Empty
+ - Bash output file: None
+
+ - Pipex output file:
+ Command: [grep]
+
+ Command: [grep]
+
+\EOF
+
+ - Bash standard stream:
+pipexMedic: execve failed: No such file or directory
+\EOF
+
+ - Pipex standard stream:
+pipex: command 1 not found
+: No such file or directory
+pipex: command 2 not found
+: No such file or directory
+\EOF
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
+
+
+============================================================================
+
+
+      CONCURRENCY TEST
+      NUMBER 1
+      < input sleep 3 | sleep 3 > output
+
+
+ - Bash output file: None
 
  - Pipex output file: None
 
  - Bash standard stream:
-pipex: buzzFizz: command not found
+pipexMedic: execve failed: No such file or directory
 \EOF
 
- - Pipex standard stream: None
+ - Pipex standard stream:
+ Command: [sleep]
 
- - Bash exit code value: 127
+ Command: [sleep]
 
- - Pipex exit code value: 11
+\EOF
+
+(Your pipex' errors are written on standard output!)
+
+ - Bash exit code value: 1
+
+ - Pipex exit code value: 0
 
 

@@ -12,7 +12,9 @@ LIBFT	= libft/libft.a
 
 BONUS	= 0
 
-C_FILES_MAND 	= pipex01.c
+C_FILES_MAND 	= pipex.c \
+				get_commands.c \
+				find_command_paths.c
 
 O_FILES_MAND	= $(patsubst %, $(OBJ_DIR)/%, $(C_FILES_MAND:.c=.o))
 #O_FILES_MAND	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
@@ -30,6 +32,8 @@ make_libft:
 make_obj_dir:
 	@echo "$(YEL)\n --- Making obj_dir Directory --- $(WHITE)"
 	mkdir -p $(OBJ_DIR)/
+#	this "rm outfile ..." needs to be deleted 
+	rm outfile && touch outfile
 
 
 $(OBJ_DIR)/%.o:		%.c

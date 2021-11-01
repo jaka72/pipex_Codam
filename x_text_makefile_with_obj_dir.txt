@@ -1,0 +1,28 @@
+First make a variable with the name of directory
+	OBJ_DIR = obj_dir
+
+Then make a variable OBJ_FILES, where you substitute .c with .o, but you attach the 
+name of that directory to each .o
+   Like so:		OBJ_FILES	= $(patsubst %, $(OBJ_DIR)/%, $(C_FILES_MAIN:.c=.o))
+					OR
+				OBJ_FILES	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
+			
+	
+In some rule you need to write a recipe to create that directory:
+ makedir:
+	mkdir -p $(OBJ_DIR)
+
+
+If you have other files in subfolders, you need to also make these paths:
+ makedir:
+	mkdir -p $(OBJ_DIR)
+	mkdir -p $(OBJ_DIR)/subfolder
+
+
+You need to call this rule somewhere at the begining:
+ all: makedir $(NAME)
+
+
+Then you include the obj_dir path in the .o rule:
+ $(OBJ_DIR)/%.o:  %.c
+	gcc -p $(FLAGS) -c $< -o $@
