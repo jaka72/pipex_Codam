@@ -14,7 +14,8 @@ BONUS	= 0
 
 C_FILES_MAND 	= pipex.c \
 				get_commands.c \
-				find_command_paths.c
+				find_command_paths.c \
+				free_all.c
 
 O_FILES_MAND	= $(patsubst %, $(OBJ_DIR)/%, $(C_FILES_MAND:.c=.o))
 #O_FILES_MAND	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
@@ -45,7 +46,8 @@ $(NAME): $(O_FILES_MAND)
 	@echo "$(YEL)\n --- Making the Executable --- $(WHITE)"
 	gcc $^ $(FLAGS) $(LIBFT) -o $(NAME)
 
-re: clean_all
+re: fclean
+	make
 
 clean:
 	rm -rf $(OBJ_DIR)

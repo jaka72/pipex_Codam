@@ -39,7 +39,7 @@ echo "This is Standard Error (stderr)  and my parameters are: \"$@\" "   >&2 # T
 
 
 
-# STREAMING DATA VIA PIPE | ,THEN INTO FILE VIA > 
+# STREAMING DATA VIA PIPE | ,THEN INTO FILE VIA >
   echo  "goot tay" | tr t d > file1.txt 	# "good day"
 
 

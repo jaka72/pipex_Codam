@@ -6,7 +6,7 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/01 14:40:18 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/01 14:44:25 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/09 13:25:45 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 typedef struct data
 {
-	int		pid1;
-	int		pid2;
+	pid_t		pid1;
+	pid_t		pid2;
 	int		pipe_end[2];
 	int		fd2;
 	int		fd1;
@@ -31,3 +31,15 @@ typedef struct data
 	char	**bin_all_paths_cmd1;
 	char	**bin_all_paths_cmd2;
 } t_data;
+
+
+/*
+ALL	MALLOCS
+	pipex_child.c
+		pid
+	pipex_pipes.c
+		pipes
+		pipes[i]
+	pipex_utils.c
+		str
+*/
