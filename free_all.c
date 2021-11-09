@@ -6,7 +6,7 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/02 15:50:01 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/09 18:39:08 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/09 20:29:11 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	free_all(t_data *d)
 	{
 		printf("  FREE d->cmd2 [%s]\n", d->cmd2[i]);
 		free(d->cmd2[i]);
+//		printf("  FREE d->cmd2 [%s]\n", d->cmd2[i]);
+
 		i++;
 	}
 	free(d->cmd2);

@@ -1,24 +1,29 @@
-#include <fcntl.h> 
-#include <stdio.h> 
-#include <string.h>
-#include <unistd.h> 
+#include "pipex.h"
+
 
 int main(void)
 {
-	// int c;
-	// char buffer[1];
+	char **arr;
 
-	// printf("This comes from redirection\n");
-	// c = read(1, buffer, 1);
-	// printf(" [%c] \n", buffer[0]);
+	char *str = "abcd/efg/ho/jklm/nopr/stu/vz/wyq";
+	
+	arr = ft_split(str, '/');
 
+	int i = 0;
+	while (arr[i])
+	{
+		printf("%d: %s\n", i, arr[i]);
+		i++;
+	}
 
-		if (access("/bin/cat", X_OK) == 0)
-			printf("\n It is found\n");
-		else
-			printf("\n NOT found\n");
-
-
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+//	free(arr);
 
 	return (0);
 }

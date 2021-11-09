@@ -123,22 +123,22 @@ int	main(int argc, char *argv[], char *envp[])
 				perror("pipex: Infile cannot be opened; bash");
 //				printf("...infile: %s\n", d.infile); // THIS IS PRINTED ONLY AT END
 //				printf("%s", d.infile);
-//				free_all(&d);
+				free_all(&d);
 //				system("leaks pipex");
-				exit(0);
+				_exit(0);  // IS THIS EXIT ALLOWD ???
 //				return (-1);
 			}
-			printf(" ..... path: [%s]\n", d.path_cmd1);
+//			printf(" ..... path: [%s]\n", d.path_cmd1);
 			dup2(d.fd1, 0);
 			dup2(d.pipe_end[1], 1);
 			close(d.fd1);
 			close(d.pipe_end[1]);
-			execve(d.path_cmd1, d.cmd1, NULL);
-			// if (err == -1)
-			// {
-			// 	printf("Could not find command 1 to execute!\n"); // THIS DOES NOT APPEAR AFTER EXEC
-			// 	return (0);
-			// }
+			err = execve(d.path_cmd1, d.cmd1, NULL);
+			if (err == -1)
+			{
+				printf("Could not find command 1 to execute!\n"); // THIS DOES NOT APPEAR AFTER EXEC
+				return (0);
+			}
 		}
 		else if (d.pid2 > 0)
 		{		// parent
@@ -161,9 +161,10 @@ int	main(int argc, char *argv[], char *envp[])
 			if (d.fd2 < 0)
 			{
 				perror("pipex: Outfile cannot be opened; bash");
-//				free_all(&d);
+				free_all(&d);
 //				printf("%s", d.outfile);
-				return (-1);
+				exit(0);
+//				return (-1);
 			}
 			dup2(d.pipe_end[0], 0); // read from pipe becomes stdin
 			dup2(d.fd2, 1);		//  file becomes destination (output)
@@ -176,19 +177,22 @@ int	main(int argc, char *argv[], char *envp[])
 				printf("Could not find command 2 to execute!\n");
 				return (0);
 			}
+//			free_all(&d);
 		}
 //
 		free_all(&d);
 	}
 	else
 	{
+//		free_all(&d);
 		close(d.pipe_end[0]);
 		close(d.pipe_end[1]);
 	}
 
 	free_all(&d);
-	system("leaks pipex");
+//	system("leaks pipex");
 	printf("\nEnd of main.\n\n");
-	return (0);
+	exit(0);
+//	return (0);
 }
 
