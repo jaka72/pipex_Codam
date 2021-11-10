@@ -180,7 +180,7 @@ int	main(int argc, char *argv[], char *envp[])
 //			free_all(&d);
 		}
 //
-		free_all(&d);
+//		free_all(&d);
 	}
 	else
 	{
