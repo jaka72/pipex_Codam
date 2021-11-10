@@ -6,20 +6,19 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/02 15:50:01 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/10 09:43:44 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/10 18:50:15 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	free_all(t_data *d)
+int	free_all(t_data *d, int exit_code)
 {
 	int	i;
 
 	i = 0;
 	while (d->cmd1[i] != NULL)
 	{
-		printf("  FREE d->cmd1 [%s]\n", d->cmd1[i]);
 		free(d->cmd1[i]);
 		i++;
 	}
@@ -30,9 +29,7 @@ int	free_all(t_data *d)
 	i = 0;
 	while (d->cmd2[i] != NULL)
 	{
-		printf("  FREE d->cmd2 [%s]\n", d->cmd2[i]);
 		free(d->cmd2[i]);
-//		printf("  FREE d->cmd2 [%s]\n", d->cmd2[i]);
 
 		i++;
 	}
@@ -64,5 +61,7 @@ int	free_all(t_data *d)
 	}
 	free(d->bin_all_paths_cmd2);
 
-	return (0);
+//	return (0);
+	exit_code = 1;
+	exit(exit_code);
 }
