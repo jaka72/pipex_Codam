@@ -6,7 +6,7 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/02 15:50:01 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/11 13:38:53 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/11 18:10:54 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ void	free_cmd1_arr(t_data *d, int i)
 	i = 0;
 	while (d->cmd1[i] != NULL)
 	{
-		free(d->cmd1[i]);
+		if (d->cmd1[i] != NULL)
+			free(d->cmd1[i]);
+		d->cmd1[i] = NULL;
 		i++;
 	}
 	free(d->cmd1);
@@ -58,7 +60,7 @@ void	free_all_paths_cmd2(t_data *d, int i)
 	free(d->bin_all_paths_cmd2);
 }
 
-// remove leaks
+//	system("leaks pipex");
 int	free_all(t_data *d, int exit_code)
 {
 	int	i;
@@ -68,6 +70,5 @@ int	free_all(t_data *d, int exit_code)
 	free_cmd2_arr(d, i);
 	free_all_paths_cmd1(d, i);
 	free_all_paths_cmd2(d, i);
-	system("leaks pipex");
 	exit(exit_code);
 }

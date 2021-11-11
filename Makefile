@@ -14,6 +14,7 @@ BONUS	= 0
 
 C_FILES_MAND 	= pipex.c \
 				find_command_paths.c \
+				init_data_and_get_commands.c \
 				free_all.c
 
 O_FILES_MAND	= $(patsubst %, $(OBJ_DIR)/%, $(C_FILES_MAND:.c=.o))
