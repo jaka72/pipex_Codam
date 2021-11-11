@@ -6,7 +6,7 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/11 14:10:12 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/11 18:47:38 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/11 20:52:04 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,9 @@ void	execute_command_2(t_data *d)
 	if (err == -1)
 	{
 		dup2(2, 1);
-		printf("pipex error: %s: command not found\n", d->command2);
-//		perror("pipex error);
+//		printf("a) errno %d\n", errno);
+		printf("b) pipex error: %s: command not found\n", d->command2);
+//		perror("c) pipex error");
 		exit(127);
 	}
 }
