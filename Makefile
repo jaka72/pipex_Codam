@@ -1,7 +1,7 @@
 GRN = \033[1;32m
 YEL = \033[0;33m
 RED = \033[1;31m
-WHITE = \033[0m
+WHT = \033[0m
 
 NAME 	= pipex
 FLAGS 	= -Wall -Werror -Wextra
@@ -13,37 +13,33 @@ LIBFT	= libft/libft.a
 BONUS	= 0
 
 C_FILES_MAND 	= pipex.c \
-				get_commands.c \
 				find_command_paths.c \
 				free_all.c
 
 O_FILES_MAND	= $(patsubst %, $(OBJ_DIR)/%, $(C_FILES_MAND:.c=.o))
-#O_FILES_MAND	= $(addprefix $(OBJ_DIR)/, $(SRCS:.c=.o))
 
 all:	make_libft	make_obj_dir	$(NAME)
-	@echo "$(GRN)\n --- Done --- $(WHITE)"
-
+	@echo "$(GRN)\n --- Done --- $(WHT)"
 
 
 make_libft:
-	@echo "$(YEL)\n --- Making libft.a Library --- $(WHITE)"
+	@echo "$(YEL)\n --- Making libft.a Library --- $(WHT)"
 	make -C ./libft
 
 
 make_obj_dir:
-	@echo "$(YEL)\n --- Making obj_dir Directory --- $(WHITE)"
+	@echo "$(YEL)\n --- Making obj_dir Directory --- $(WHT)"
 	mkdir -p $(OBJ_DIR)/
-#	this "rm outfile ..." needs to be deleted 
 	rm outfile && touch outfile
 
 
 $(OBJ_DIR)/%.o:		%.c
-	@echo "$(YEL)\n --- Making .o file --- $(WHITE)"
+	@echo "$(YEL)\n --- Making .o file --- $(WHT)"
 	gcc -g $(FLAGS) -c $< -o $@
 
 
 $(NAME): $(O_FILES_MAND)
-	@echo "$(YEL)\n --- Making the Executable --- $(WHITE)"
+	@echo "$(YEL)\n --- Making the Executable --- $(WHT)"
 	gcc $^ $(FLAGS) $(LIBFT) -o $(NAME)
 
 re: fclean

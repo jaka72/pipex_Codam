@@ -1,0 +1,9 @@
+norminette find_command_paths.c
+norminette free_all.c
+norminette pipex.c
+# norminette
+# norminette
+# norminette
+# norminette
+# norminette
+# norminette

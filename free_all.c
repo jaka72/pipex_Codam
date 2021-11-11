@@ -6,16 +6,14 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/02 15:50:01 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/10 18:50:15 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/11 13:38:53 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	free_all(t_data *d, int exit_code)
+void	free_cmd1_arr(t_data *d, int i)
 {
-	int	i;
-
 	i = 0;
 	while (d->cmd1[i] != NULL)
 	{
@@ -23,45 +21,53 @@ int	free_all(t_data *d, int exit_code)
 		i++;
 	}
 	free(d->cmd1);
-	
+}
 
-	
+void	free_cmd2_arr(t_data *d, int i)
+{
 	i = 0;
 	while (d->cmd2[i] != NULL)
 	{
 		free(d->cmd2[i]);
-
 		i++;
 	}
 	free(d->cmd2);
+}
 
-
-
+void	free_all_paths_cmd1(t_data *d, int i)
+{
 	i = 0;
 	while (d->bin_all_paths_cmd1[i] != NULL)
 	{
-//		printf("  FREE cmd1 [%s]\n", d->bin_all_paths_cmd1[i]);
 		free(d->bin_all_paths_cmd1[i]);
 		d->bin_all_paths_cmd1[i] = NULL;
-//		printf("  FREED cmd1 [%s]\n", d->bin_all_paths_cmd1[i]);
 		i++;
 	}
 	free(d->bin_all_paths_cmd1);
+}
 
-
-
+void	free_all_paths_cmd2(t_data *d, int i)
+{
 	i = 0;
 	while (d->bin_all_paths_cmd2[i] != NULL)
 	{
-//		printf("  FREE cmd2[%s]\n", d->bin_all_paths_cmd2[i]);
 		free(d->bin_all_paths_cmd2[i]);
 		d->bin_all_paths_cmd2[i] = NULL;
-//		printf("  FREED cmd2[%s]\n", d->bin_all_paths_cmd2[i]);
 		i++;
 	}
 	free(d->bin_all_paths_cmd2);
+}
 
-//	return (0);
-	exit_code = 1;
+// remove leaks
+int	free_all(t_data *d, int exit_code)
+{
+	int	i;
+
+	i = 0;
+	free_cmd1_arr(d, i);
+	free_cmd2_arr(d, i);
+	free_all_paths_cmd1(d, i);
+	free_all_paths_cmd2(d, i);
+	system("leaks pipex");
 	exit(exit_code);
 }
