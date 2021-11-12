@@ -6,7 +6,7 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/11 14:10:12 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/11 20:52:04 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/12 10:28:38 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	execute_command_1(t_data *d)
 	if (d->fd1 < 0)
 	{
 		dup2(2, 1);
-//		perror("");
 		printf("pipex error: %s: No such file or directory", d->infile);
 		exit(1);
 	}
@@ -64,8 +63,7 @@ void	execute_command_1(t_data *d)
 	if (err == -1)
 	{
 		dup2(2, 1);
-		printf("pipex error: %s: command not found\n", d->command1);
-//		perror("pipex error");
+		printf("2 pipex error: %s: command not found\n", d->command1);
 		exit(127);
 	}
 }
@@ -92,9 +90,7 @@ void	execute_command_2(t_data *d)
 	if (err == -1)
 	{
 		dup2(2, 1);
-//		printf("a) errno %d\n", errno);
-		printf("b) pipex error: %s: command not found\n", d->command2);
-//		perror("c) pipex error");
+		printf("pipex error: %s: command not found\n", d->command2);
 		exit(127);
 	}
 }

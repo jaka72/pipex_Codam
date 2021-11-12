@@ -31,7 +31,7 @@ make_libft:
 make_obj_dir:
 	@echo "$(YEL)\n --- Making obj_dir Directory --- $(WHT)"
 	mkdir -p $(OBJ_DIR)/
-	rm outfile && touch outfile
+#	rm outfile && touch outfile
 
 
 $(OBJ_DIR)/%.o:		%.c
@@ -39,7 +39,7 @@ $(OBJ_DIR)/%.o:		%.c
 	gcc -g $(FLAGS) -c $< -o $@
 
 
-$(NAME): $(O_FILES_MAND)
+$(NAME): $(O_FILES_MAND) pipex.h
 	@echo "$(YEL)\n --- Making the Executable --- $(WHT)"
 	gcc $^ $(FLAGS) $(LIBFT) -o $(NAME)
 
