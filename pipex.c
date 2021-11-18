@@ -6,26 +6,58 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/11 14:10:12 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/12 10:28:38 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/18 11:20:11 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	check_if_local_commands(t_data *d)
+// int	check_if_local_commands_OLD(t_data *d)
+// {
+// 	if (d->command1[0] == '.' && d->command1[1] == '/')
+// 	{
+// 		d->cmd1_is_local = 1;
+// 		d->path_cmd1 = d->command1;
+// 	}
+// 	if (d->command2[0] == '.' && d->command2[1] == '/')
+// 	{
+// 		d->cmd2_is_local = 1;
+// 		d->path_cmd2 = d->command2;
+// 	}
+// 	return (0);
+// }
+
+// In func check_if_local ...
+// Add argv argument to check if local commands
+//    In this func add access check for argv [2] and [3]
+//    Remove all checking for ./
+//		Also, change it in header and in init_data...
+// In func init_data ...
+//		Remove joining / with command
+//	instead, add another join_and_free in 2 functions append...
+//		where in loop each path gets appended and / at the end
+//		
+
+int	check_if_local_commands(t_data *d, char *argv[])
 {
-	if (d->command1[0] == '.' && d->command1[1] == '/')
-	{
-		d->cmd1_is_local = 1;
-		d->path_cmd1 = d->command1;
-	}
-	if (d->command2[0] == '.' && d->command2[1] == '/')
-	{
-		d->cmd2_is_local = 1;
-		d->path_cmd2 = d->command2;
-	}
+	if (access(argv[2], X_OK) == 0)
+		d->path_cmd1 = argv[2];
+	if (access(argv[3], X_OK) == 0)
+		d->path_cmd2 = argv[3];
+
+	// if (d->command1[0] == '.' && d->command1[1] == '/')
+	// {
+	// 	d->cmd1_is_local = 1;
+	// 	d->path_cmd1 = d->command1;
+	// }
+	// if (d->command2[0] == '.' && d->command2[1] == '/')
+	// {
+	// 	d->cmd2_is_local = 1;
+	// 	d->path_cmd2 = d->command2;
+	// }
 	return (0);
 }
+
 
 int	check_args_and_get_data(t_data *d, int argc, char *envp[], char *argv[])
 {

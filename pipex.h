@@ -6,7 +6,7 @@
 /*   By: jaka <jaka@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/12 10:28:50 by jaka          #+#    #+#                 */
-/*   Updated: 2021/11/12 10:28:52 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/18 10:49:10 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ int	append_cmd2_to_all_paths(t_data *d);
 int	find_correct_path_of_cmd(t_data *d);
 int	free_all(t_data *d, int exit_code);
 int	init_data_and_get_commands(char *argv[], t_data *d);
-int	check_if_local_commands(t_data *d);
+int	check_if_local_commands(t_data *d, char *argv[]);
 
 #endif
