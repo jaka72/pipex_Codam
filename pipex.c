@@ -6,7 +6,7 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/11 14:10:12 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/25 16:52:35 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/26 11:01:25 by jaka          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	check_command_1(t_data *d)
 		d->path_cmd1 = d->path_cmd1;
 	else if (d->cmd1[0][0] == '/')
 	{
-		ft_putstr_fd("pipex error: cmd 1 No such file or directory\n", 2);
+		ft_putstr_fd("pipex error: cmd1, No such file or directory\n", 2);
 		d->cmd1_can_execute = 0;
 	}
 	else if (d->cmd1[0][0] != '.' && d->cmd1[0][1] != '/')
@@ -32,10 +32,10 @@ int	check_command_1(t_data *d)
 		if (errno == 2)
 		{
 			d->cmd1_can_execute = 0;
-			ft_putstr_fd("pipex error: cmd 1b No such file or directory\n", 2);
+			ft_putstr_fd("pipex error: cmd1, No such file or directory\n", 2);
 		}
 		else
-			perror("\ncmd 1 c pipex error");
+			perror("\npipex error, cmd1");
 	}
 	return (0);
 }
@@ -51,7 +51,7 @@ int	check_command_2(t_data *d)
 		d->cmd2_can_execute = 0;
 	else if (d->cmd2[0][0] == '/')
 	{
-		ft_putstr_fd("pipex error: cdm 2 a No such file or directory\n", 2);
+		ft_putstr_fd("pipex error: cdm2, No such file or directory\n", 2);
 		free_all(d, 127);
 	}
 	else if (d->cmd2[0][0] != '.' && d->cmd2[0][1] != '/')
@@ -60,7 +60,7 @@ int	check_command_2(t_data *d)
 		d->path_cmd2 = d->cmd2[0];
 	else
 	{
-		perror("cdm 2 b pipex error");
+		perror("pipex error, cmd1");
 		if (errno == 13)
 			d->exit_code = 126;
 	}
@@ -73,7 +73,7 @@ void	execute_command_1(t_data *d)
 	d->fd1 = open(d->infile, O_RDONLY);
 	if (d->fd1 < 0)
 	{
-		perror("exec 1 pipex error");
+		perror("pipex error");
 		exit(1);
 	}
 	dup2(d->fd1, STDIN_FILENO);
@@ -93,7 +93,7 @@ void	execute_command_2(t_data *d)
 	d->fd2 = open(d->outfile, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (d->fd2 < 0)
 	{
-		perror("exec 2 pipex error");
+		perror("pipex error");
 		free_all(d, 1);
 	}
 	dup2(d->pipe_end[0], STDIN_FILENO);
@@ -105,7 +105,7 @@ void	execute_command_2(t_data *d)
 		d->err = execve(d->path_cmd2, d->cmd2, NULL);
 	else
 	{
-		ft_putstr_fd("pipex error: exec 2 b No such file or directory\n", 2);
+		ft_putstr_fd("pipex error: cdm2, No such file or directory\n", 2);
 		free_all(d, 127);
 	}
 	if (d->err == -1)
