@@ -6,13 +6,13 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/01 15:22:23 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/18 11:14:39 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/24 14:57:17 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*ft_strjoin_and_free(char *s1, char const *s2)
+char	*ft_strjoin_n_free(char *s1, char const *s2)
 {
 	char	*newstr;
 
@@ -31,12 +31,10 @@ int	append_cmd1_to_all_paths(t_data *d)
 	i = 0;
 	while (d->bin_all_paths_cmd1[i] != NULL)
 	{
-		printf("a: %s\n", d->bin_all_paths_cmd1[i]);
-		d->bin_all_paths_cmd1[i] = ft_strjoin_and_free(d->bin_all_paths_cmd1[i],
+		d->bin_all_paths_cmd1[i] = ft_strjoin_n_free(d->bin_all_paths_cmd1[i],
 				"/");
-		d->bin_all_paths_cmd1[i] = ft_strjoin_and_free(d->bin_all_paths_cmd1[i],
+		d->bin_all_paths_cmd1[i] = ft_strjoin_n_free(d->bin_all_paths_cmd1[i],
 				d->cmd1[0]);
-		printf("b: %s\n\n", d->bin_all_paths_cmd1[i]);
 		if (d->bin_all_paths_cmd1[i] == NULL)
 			free_all(d, 0);
 		i++;
@@ -52,9 +50,9 @@ int	append_cmd2_to_all_paths(t_data *d)
 	i = 0;
 	while (d->bin_all_paths_cmd2[i] != NULL)
 	{
-		d->bin_all_paths_cmd2[i] = ft_strjoin_and_free(d->bin_all_paths_cmd2[i],
+		d->bin_all_paths_cmd2[i] = ft_strjoin_n_free(d->bin_all_paths_cmd2[i],
 				"/");
-		d->bin_all_paths_cmd2[i] = ft_strjoin_and_free(d->bin_all_paths_cmd2[i],
+		d->bin_all_paths_cmd2[i] = ft_strjoin_n_free(d->bin_all_paths_cmd2[i],
 				d->cmd2[0]);
 		if (d->bin_all_paths_cmd2[i] == NULL)
 		{

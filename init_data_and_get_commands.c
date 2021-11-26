@@ -6,15 +6,36 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/11 18:08:44 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/18 11:13:29 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/25 16:50:59 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// APPARENTLY NOT NECESSARY, BECAUSE LATER THE exec() 
-//		if (d->cmd1[0] == NULL || d->cmd2[0] == NULL) 
-//			free_all(d, 0);
+void	exit_with_code(t_data *d)
+{
+	if (d->exit_code == 126)
+		exit(126);
+	exit(127);
+}
+
+//	perror("pipex perror: ambiguous redirect");
+int	check_args_and_get_data(t_data *d, int argc, char *envp[], char *argv[])
+{
+	if (argc != 5)
+	{
+		ft_putstr_fd("Error\n", 2);
+		ft_putstr_fd("  Usage: ./pipex infile cmd1 cmd2 outfile\n", 2);
+		exit(1);
+	}
+	init_data_and_get_commands(argv, d);
+	find_paths(envp, d);
+	append_cmd1_to_all_paths(d);
+	append_cmd2_to_all_paths(d);
+	find_correct_path_of_cmd(d);
+	return (0);
+}
+
 int	init_data_and_get_commands(char *argv[], t_data *d)
 {
 	d->infile = argv[1];
@@ -33,10 +54,9 @@ int	init_data_and_get_commands(char *argv[], t_data *d)
 		free_all(d, 0);
 	d->command1 = d->cmd1[0];
 	d->command2 = d->cmd2[0];
-	check_if_local_commands(d, argv);
-//	if (d->cmd1_is_local == 0)
-//		d->cmd1[0] = ft_strjoin("/", d->cmd1[0]);  // INSTEAD OF THIS, APPEND SLASH TO ALL PATHS 
-//	if (d->cmd2_is_local == 0)						// WHEN THEY ARE CREATED FROM THE PATH
-//		d->cmd2[0] = ft_strjoin("/", d->cmd2[0]);
+	d->cmd1_can_execute = 1;
+	d->cmd2_can_execute = 1;
+	d->exit_code = 0;
+	d->err = 0;
 	return (0);
 }

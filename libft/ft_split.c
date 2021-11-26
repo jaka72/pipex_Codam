@@ -6,13 +6,13 @@
 /*   By: jmurovec <marvin@codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/02 11:32:03 by jmurovec      #+#    #+#                 */
-/*   Updated: 2020/11/02 11:32:03 by jmurovec      ########   odam.nl         */
+/*   Updated: 2021/11/12 11:44:46 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-static void		*free_arr(char **splitted, int i)
+static void	*free_arr(char **splitted, int i)
 {
 	int	n;
 
@@ -26,7 +26,7 @@ static void		*free_arr(char **splitted, int i)
 	return (NULL);
 }
 
-static int		count_words(char const *s, char c)
+static int	count_words(char const *s, char c)
 {
 	int		i;
 	int		words;
@@ -42,7 +42,7 @@ static int		count_words(char const *s, char c)
 	return (words);
 }
 
-static int		words_len(char const *s, char c)
+static int	words_len(char const *s, char c)
 {
 	int		i;
 	int		len;
@@ -57,7 +57,7 @@ static int		words_len(char const *s, char c)
 	return (len);
 }
 
-static char		**fill(char const *s, int words, char c, char **splitted)
+static char	**fill(char const *s, int words, char c, char **splitted)
 {
 	int		i;
 	int		j;
@@ -86,7 +86,7 @@ static char		**fill(char const *s, int words, char c, char **splitted)
 	return (splitted);
 }
 
-char			**ft_split(char	const *s, char c)
+char	**ft_split(char	const *s, char c)
 {
 	char	**splitted;
 	int		words;
@@ -94,7 +94,7 @@ char			**ft_split(char	const *s, char c)
 	if (!s)
 		return (NULL);
 	words = count_words(s, c);
-	splitted = (char **)malloc(sizeof(char*) * (words + 1));
+	splitted = (char **)malloc(sizeof(char *) * (words + 1));
 	if (!splitted)
 		return (NULL);
 	splitted = fill(s, words, c, splitted);

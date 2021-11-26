@@ -6,125 +6,110 @@
 /*   By: jmurovec <jmurovec@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/11/11 14:10:12 by jmurovec      #+#    #+#                 */
-/*   Updated: 2021/11/18 11:20:11 by jaka          ########   odam.nl         */
+/*   Updated: 2021/11/25 16:52:35 by jmurovec      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// int	check_if_local_commands_OLD(t_data *d)
-// {
-// 	if (d->command1[0] == '.' && d->command1[1] == '/')
-// 	{
-// 		d->cmd1_is_local = 1;
-// 		d->path_cmd1 = d->command1;
-// 	}
-// 	if (d->command2[0] == '.' && d->command2[1] == '/')
-// 	{
-// 		d->cmd2_is_local = 1;
-// 		d->path_cmd2 = d->command2;
-// 	}
-// 	return (0);
-// }
-
-// In func check_if_local ...
-// Add argv argument to check if local commands
-//    In this func add access check for argv [2] and [3]
-//    Remove all checking for ./
-//		Also, change it in header and in init_data...
-// In func init_data ...
-//		Remove joining / with command
-//	instead, add another join_and_free in 2 functions append...
-//		where in loop each path gets appended and / at the end
-//		
-
-int	check_if_local_commands(t_data *d, char *argv[])
+// ALSO CHECKING IF LOKAL OR ORIGINAL
+int	check_command_1(t_data *d)
 {
-	if (access(argv[2], X_OK) == 0)
-		d->path_cmd1 = argv[2];
-	if (access(argv[3], X_OK) == 0)
-		d->path_cmd2 = argv[3];
-
-	// if (d->command1[0] == '.' && d->command1[1] == '/')
-	// {
-	// 	d->cmd1_is_local = 1;
-	// 	d->path_cmd1 = d->command1;
-	// }
-	// if (d->command2[0] == '.' && d->command2[1] == '/')
-	// {
-	// 	d->cmd2_is_local = 1;
-	// 	d->path_cmd2 = d->command2;
-	// }
+	if (access(d->path_cmd1, X_OK) == 0 && d->cmd1[0][0] != '/'
+		&& d->cmd1[0][0] != '.')
+		d->path_cmd1 = d->path_cmd1;
+	else if (d->cmd1[0][0] == '/')
+	{
+		ft_putstr_fd("pipex error: cmd 1 No such file or directory\n", 2);
+		d->cmd1_can_execute = 0;
+	}
+	else if (d->cmd1[0][0] != '.' && d->cmd1[0][1] != '/')
+		ft_putstr_fd("pipex error: Command not found\n", 2);
+	else if (access(d->cmd1[0], X_OK) == 0)
+		d->path_cmd1 = d->cmd1[0];
+	else
+	{
+		if (errno == 2)
+		{
+			d->cmd1_can_execute = 0;
+			ft_putstr_fd("pipex error: cmd 1b No such file or directory\n", 2);
+		}
+		else
+			perror("\ncmd 1 c pipex error");
+	}
 	return (0);
 }
 
-
-int	check_args_and_get_data(t_data *d, int argc, char *envp[], char *argv[])
+// ALSO CHECKING IF LOKAL OR ORIGINAL
+int	check_command_2(t_data *d)
 {
-	if (argc != 5)
+	if (access(d->path_cmd2, X_OK) == 0 && d->cmd2[0][0] != '/'
+		&& d->cmd2[0][0] != '.')
+		d->path_cmd2 = d->path_cmd2;
+	else if (access(d->path_cmd2, X_OK) == 0 && (d->cmd2[0][0] == '/'
+		|| d->cmd2[0][0] == '.'))
+		d->cmd2_can_execute = 0;
+	else if (d->cmd2[0][0] == '/')
 	{
-		dup2(2, 1);
-		printf("pipex error: $RES_REAL: ambiguous redirect\n");
-		exit(1);
+		ft_putstr_fd("pipex error: cdm 2 a No such file or directory\n", 2);
+		free_all(d, 127);
 	}
-	init_data_and_get_commands(argv, d);
-	find_paths(envp, d);
-	append_cmd1_to_all_paths(d);
-	append_cmd2_to_all_paths(d);
-	find_correct_path_of_cmd(d);
+	else if (d->cmd2[0][0] != '.' && d->cmd2[0][1] != '/')
+		ft_putstr_fd("pipex error: Command not found\n", 2);
+	else if (access(d->cmd2[0], X_OK) == 0)
+		d->path_cmd2 = d->cmd2[0];
+	else
+	{
+		perror("cdm 2 b pipex error");
+		if (errno == 13)
+			d->exit_code = 126;
+	}
 	return (0);
 }
 
 void	execute_command_1(t_data *d)
 {
-	int	err;
-
 	close(d->pipe_end[0]);
 	d->fd1 = open(d->infile, O_RDONLY);
 	if (d->fd1 < 0)
 	{
-		dup2(2, 1);
-		printf("pipex error: %s: No such file or directory", d->infile);
+		perror("exec 1 pipex error");
 		exit(1);
 	}
 	dup2(d->fd1, STDIN_FILENO);
 	dup2(d->pipe_end[1], STDOUT_FILENO);
 	close(d->fd1);
 	close(d->pipe_end[1]);
-	err = execve(d->path_cmd1, d->cmd1, NULL);
-	if (err == -1)
-	{
-		dup2(2, 1);
-		printf("2 pipex error: %s: command not found\n", d->command1);
+	check_command_1(d);
+	if (d->cmd1_can_execute == 1)
+		d->err = execve(d->path_cmd1, d->cmd1, NULL);
+	if (d->err == -1)
 		exit(127);
-	}
 }
 
-//waitpid(d.pid2, &wstatus, 0);  // IS THIS REALLY NECESSARY NOW?
-// IS IT NECESSARY TO CHECK waitpid IN PARENT OF THE INNER CHILD?
 void	execute_command_2(t_data *d)
 {
-	int	err;
-
-	wait(&d->pid2);
 	close(d->pipe_end[1]);
 	d->fd2 = open(d->outfile, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (d->fd2 < 0)
 	{
-		perror("pipex error");
+		perror("exec 2 pipex error");
 		free_all(d, 1);
 	}
 	dup2(d->pipe_end[0], STDIN_FILENO);
 	dup2(d->fd2, STDOUT_FILENO);
 	close(d->fd2);
 	close(d->pipe_end[0]);
-	err = execve(d->path_cmd2, d->cmd2, NULL);
-	if (err == -1)
+	check_command_2(d);
+	if (d->cmd2_can_execute == 1)
+		d->err = execve(d->path_cmd2, d->cmd2, NULL);
+	else
 	{
-		dup2(2, 1);
-		printf("pipex error: %s: command not found\n", d->command2);
-		exit(127);
+		ft_putstr_fd("pipex error: exec 2 b No such file or directory\n", 2);
+		free_all(d, 127);
 	}
+	if (d->err == -1)
+		exit_with_code(d);
 }
 
 int	main(int argc, char *argv[], char *envp[])
