@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# JAKA ADDED SEVERAL TESTS FOR A LOCAL COMMAND VARIATIONS
+# The "mycommand" is created from gcc test_print.c
+#
+
+
 bold=$(tput bold)
 normal=$(tput sgr0)
 
@@ -37,6 +42,10 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
+
+
+
 # valid arguments
 printf "$PINK"
 echo "${bold}TEST 2"
@@ -46,6 +55,10 @@ bash single_test.sh files_in/file_in "cat -t" "grep FANTASTISCH" files_out/res_m
 EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
+
+
+
+
 
 # valid arguments
 printf "$PINK"
@@ -57,6 +70,8 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
+
 # valid arguments
 printf "$PINK"
 echo "${bold}TEST 4"
@@ -67,15 +82,19 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
+
 # valid arguments
 printf "$PINK"
-echo "${bold}TEST 4"
+echo "${bold}TEST 5"
 echo "valid arguments${normal}"
 printf "$RESET"
 bash single_test.sh files_in/file_in "ls -l" "wc" files_out/res_mine
 EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
+
+
 
 # input file does not exist
 printf "$PINK"
@@ -87,6 +106,8 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
+
 # first command does not exist, second command doesnt need input
 printf "$PINK"
 echo "${bold}TEST 7"
@@ -96,6 +117,7 @@ bash single_test.sh files_in/file_in "whateverrr" "ls" files_out/res_mine
 EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
+
 
 # both commands do not exist
 printf "$PINK"
@@ -107,6 +129,9 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
+
+
 # first command does not need input, second command does not exist
 printf "$PINK"
 echo "${bold}TEST 9"
@@ -116,6 +141,7 @@ bash single_test.sh files_in/file_in "ls" "nopeee" files_out/res_mine
 EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
+
 
 # incorrect number of arguments ( 1 arg )
 printf "$PINK"
@@ -128,6 +154,7 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
 # incorrect number of arguments ( 2 args, input file and first command only )
 printf "$PINK"
 echo "${bold}TEST 11"
@@ -138,6 +165,7 @@ bash single_test.sh files_in/file_in cat
 EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
+
 
 # incorrect number of arguments ( 3 args, input file and two commands )
 printf "$PINK"
@@ -150,6 +178,7 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
 # non-existing flag command 1
 printf "$PINK"
 echo "${bold}TEST 13"
@@ -160,6 +189,7 @@ bash single_test.sh files_in/file_in "cat -bestaatniet" "grep FANTASTISCH" files
 EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
+
 
 # non-existing flag command 2
 printf "$PINK"
@@ -172,6 +202,7 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
 # non-existing flag command 2
 printf "$PINK"
 echo "${bold}TEST 15"
@@ -183,6 +214,95 @@ EXIT_CODE=$?
 EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
 sleep 0.1
 
+
+# in-file without permissions
+printf "$PINK"
+echo "${bold}TEST 16"
+echo "file without permissions${normal}"
+printf "$RESET"
+touch files_in/file_no_permissions
+chmod 0000 files_in/file_no_permissions
+touch files_out/res_mine
+bash single_test.sh files_in/file_no_permissions "cat" "cat" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+sleep 0.1
+
+gcc test_print.c -o mycommand
+
+# 1st local command
+printf "$PINK"
+echo "${bold}TEST 17"
+echo "1st local command:  ./mycommand${normal}"
+printf "$RESET"
+touch files_out/res_mine
+bash single_test.sh files_in/file_in "./mycommand" "cat" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+sleep 0.1
+
+
+# 1st local command, without permissions
+printf "$PINK"
+echo "${bold}TEST 18"
+echo "1st local command, without permissions${normal}"
+printf "$RESET"
+chmod 0000 mycommand
+touch files_out/res_mine
+bash single_test.sh files_in/file_in "./mycommand" "cat" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+chmod 0744 mycommand
+sleep 0.1
+
+
+# Last local command I
+printf "$PINK"
+echo "${bold}TEST 19"
+echo "2nd local command:  ./mycommand${normal}"
+printf "$RESET"
+touch files_out/res_mine
+bash single_test.sh files_in/file_in "cat" "./mycommand" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+sleep 0.1
+
+# Last local command II
+printf "$PINK"
+echo "${bold}TEST 20"
+echo "2nd local command:  /mycommand${normal}"
+printf "$RESET"
+touch files_out/res_mine
+bash single_test.sh files_in/file_in "cat" "/mycommand" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+sleep 0.1
+
+# Last local command III
+printf "$PINK"
+echo "${bold}TEST 21"
+echo "2nd local command:  mycommand${normal}"
+printf "$RESET"
+touch files_out/res_mine
+bash single_test.sh files_in/file_in "cat" "mycommand" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+sleep 0.1
+
+# Last local command, no permissions
+printf "$PINK"
+echo "${bold}TEST 22"
+echo "2nd local command:  ./mycommand, no permissions${normal}"
+printf "$RESET"
+chmod 0000 mycommand
+touch files_out/res_mine
+bash single_test.sh files_in/file_in "cat" "./mycommand" files_out/res_mine
+EXIT_CODE=$?
+EXIT_CODE_TOTAL=$((EXIT_CODE_TOTAL+EXIT_CODE))
+chmod 0744 mycommand
+sleep 0.1
+
+
 if [ $EXIT_CODE_TOTAL -eq 0 ]; then
   printf "$GREEN"
   echo "${bold}========================================= PASS =========================================${normal}"
@@ -192,7 +312,7 @@ else
   printf "$RED"
   echo "${bold}========================================= FAIL =========================================${normal}"
   printf "$RESET"
-  echo "$EXIT_CODE_TOTAL out of 15 tests have not given the correct output or exitcode. Check terminal output
+  echo "$EXIT_CODE_TOTAL out of 22 tests have not given the correct output or exitcode. Check terminal output
 for more information on which tests have failed."
 fi
 
@@ -204,3 +324,5 @@ error messages are the same."
 echo -e "\n"
 rm -f files_out/res_real
 rm -f files_out/res_mine
+rm -f files_in/file_no_permissions
+rm -f mycommand
